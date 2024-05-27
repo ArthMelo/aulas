@@ -1,34 +1,41 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
 
-typedef struct _notas
-{
+typedef struct alunos_{
     char nome[40];
-    float p1, p2, trab;
-} ALUNO;
+    float P1, P2, T;
+} ALUNOS;
 
 int main()
 {
-    int numeroAlunos;
+    FILE *arquivo;
     char nomeArquivo[40];
-    printf("Informe o nome do arquivo de saida.txt: ");
-    scanf("%s", nomeArquivo);
-    printf("Informe o numero de alunos: ");
+    int numeroAlunos;
+
+    printf("Insira o numero de alunos: ");
     scanf("%d", &numeroAlunos);
+    printf("Insira o nome do arquivo: ");
+    scanf("%s", nomeArquivo);
 
-    FILE *backup;
-    ALUNO alunos[numeroAlunos];
+    ALUNOS alunos[numeroAlunos];
 
-    backup = fopen(nomeArquivo, "w");
+    arquivo = fopen(nomeArquivo, "w+");
 
-    for (int i = 0; i < numeroAlunos; i++)
+    if(arquivo == NULL)
     {
-        printf("Informe o nome do aluno %d: ", i + 1);
-        scanf("%s", (alunos[i].nome));
-        printf("Informe as 3 notas do %s: ", (alunos[i].nome));
-        scanf("%f %f %f", &alunos[i].p1, &alunos[i].p2, &alunos[i].trab);
-        fprintf(backup, "%s %.1f %.1f %.1f\n", (alunos[i].nome), (alunos[i].p1), (alunos[i].p2), (alunos[i].trab));
+        printf("Erro ao abrir arquivo\n");
+        return -1;
     }
 
-    fclose(backup);
+    for(int i = 0; i < numeroAlunos; i++)
+    {
+        printf("Insira o nome do aluno %d: ", i+1);
+        scanf("%s", alunos[i].nome);
+        printf("Insira as notas do %s: ", alunos[i].nome);
+        scanf("%f %f %f", &alunos[i].P1, &alunos[i].P2, &alunos[i].T);
+
+        fprintf(arquivo, "%s %.1f %.1f %.1f\n", alunos[i].nome, alunos[i].P1, alunos[i].P2, alunos[i].T);
+    }
+
+    fclose(arquivo);
+    return 0;
 }
